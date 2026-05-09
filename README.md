@@ -196,8 +196,3 @@ The application still runs without Firebase configuration. If Firebase values ar
 Built by **Kamogelo Legae**.
 
 This project was created as a portfolio-quality React e-commerce build and assignment submission, with a focus on clean structure, functional shopping flows, and polished user experience.
-
-## License
-
-MIT License
->>>>>>> 70a02d2 (UI Changes)
