@@ -150,7 +150,7 @@ The application still runs without Firebase configuration. If Firebase values ar
 
 ### Home Page
 
-![Home Page](screenshots/home-page.png)
+![Home Page](screenshots/home.png)
 
 ### Dark Mode
 
@@ -159,10 +159,6 @@ The application still runs without Firebase configuration. If Firebase values ar
 ### Cart
 
 ![Cart](screenshots/cart.png)
-
-### Checkout
-
-![Checkout](screenshots/checkout.png)
 
 ### Login
 
