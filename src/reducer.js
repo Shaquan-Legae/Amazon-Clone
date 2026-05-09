@@ -15,6 +15,7 @@ export const initialState = {
   basket: readStoredValue('amazon_basket', []),
   isDarkMode: readStoredValue('amazon_dark_mode', false),
   user: null,
+  wishlist: readStoredValue('amazon_wishlist', []),
 }
 
 export const getBasketTotal = (basket) =>
@@ -42,6 +43,12 @@ const reducer = (state, action) => {
       }
     }
 
+    case 'EMPTY_BASKET':
+      return {
+        ...state,
+        basket: [],
+      }
+
     case 'SET_USER':
       return {
         ...state,
@@ -53,6 +60,17 @@ const reducer = (state, action) => {
         ...state,
         isDarkMode: !state.isDarkMode,
       }
+
+    case 'TOGGLE_WISHLIST': {
+      const isWishlisted = state.wishlist.some((item) => item.id === action.item.id)
+
+      return {
+        ...state,
+        wishlist: isWishlisted
+          ? state.wishlist.filter((item) => item.id !== action.item.id)
+          : [...state.wishlist, action.item],
+      }
+    }
 
     default:
       return state

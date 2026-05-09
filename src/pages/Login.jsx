@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
 import { Link, useNavigate } from 'react-router-dom'
 import { auth, googleProvider, isFirebaseConfigured } from '../firebase.js'
+import { getAuthErrorMessage } from '../utils/authErrors.js'
+import { setLastActiveTime } from '../utils/sessionPersistence.js'
 
 function Login() {
   const navigate = useNavigate()
@@ -9,6 +11,7 @@ function Login() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [authAction, setAuthAction] = useState('')
 
   const canUseFirebase = isFirebaseConfigured && auth
 
@@ -22,14 +25,17 @@ function Login() {
     }
 
     setIsSubmitting(true)
+    setAuthAction('signIn')
 
     try {
       await signInWithEmailAndPassword(auth, email, password)
+      setLastActiveTime() // Set session activity timestamp on successful login
       navigate('/')
     } catch (authError) {
-      setError(authError.message)
+      setError(getAuthErrorMessage(authError.code))
     } finally {
       setIsSubmitting(false)
+      setAuthAction('')
     }
   }
 
@@ -42,14 +48,17 @@ function Login() {
     }
 
     setIsSubmitting(true)
+    setAuthAction('google')
 
     try {
       await signInWithPopup(auth, googleProvider)
+      setLastActiveTime() // Set session activity timestamp on successful Google sign-in
       navigate('/')
     } catch (authError) {
-      setError(authError.message)
+      setError(getAuthErrorMessage(authError.code))
     } finally {
       setIsSubmitting(false)
+      setAuthAction('')
     }
   }
 
@@ -80,15 +89,15 @@ function Login() {
             required
           />
 
-          {error && <p className="login__error">{error}</p>}
+          {error && <div className="auth__status" role="alert">{error}</div>}
 
           <button className="amazonButton login__signInButton" type="submit" disabled={isSubmitting}>
-            Sign In
+            {isSubmitting && authAction === 'signIn' ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
 
         <button className="login__googleButton" type="button" onClick={signInWithGoogle} disabled={isSubmitting}>
-          Sign in with Google
+          {isSubmitting && authAction === 'google' ? 'Connecting Google...' : 'Sign in with Google'}
         </button>
 
         <p className="login__legal">

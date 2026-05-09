@@ -20,7 +20,6 @@ function normalizeProduct(document) {
 
 function Home() {
   const [products, setProducts] = useState(fallbackProducts)
-  const [isLoadingProducts, setIsLoadingProducts] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState('All')
   const [sortMode, setSortMode] = useState('featured')
   const [searchParams] = useSearchParams()
@@ -34,8 +33,6 @@ function Home() {
         return
       }
 
-      setIsLoadingProducts(true)
-
       try {
         const productsQuery = query(collection(db, 'products'), orderBy('title'))
         const snapshot = await getDocs(productsQuery)
@@ -46,10 +43,6 @@ function Home() {
         }
       } catch (error) {
         console.warn('Using local products because Firestore products could not be loaded.', error)
-      } finally {
-        if (isMounted) {
-          setIsLoadingProducts(false)
-        }
       }
     }
 
@@ -126,8 +119,7 @@ function Home() {
       </section>
 
       <section className="home__products" aria-live="polite">
-        {isLoadingProducts && <p className="home__status">Loading Firestore products...</p>}
-        {!isLoadingProducts && visibleProducts.length === 0 && (
+        {visibleProducts.length === 0 && (
           <p className="home__status">No products match your search.</p>
         )}
         {visibleProducts.map((product) => (

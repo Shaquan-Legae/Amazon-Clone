@@ -4,8 +4,10 @@ import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket'
 import WbSunnyIcon from '@mui/icons-material/WbSunny'
 import { signOut } from 'firebase/auth'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import logo from '../assets/logo.png'
 import { auth, isFirebaseConfigured } from '../firebase.js'
 import { useStateValue } from '../StateProvider.js'
+import { clearActivityTime } from '../utils/sessionPersistence.js'
 
 function Header() {
   const [{ basket, isDarkMode, user }, dispatch] = useStateValue()
@@ -17,8 +19,22 @@ function Header() {
     dispatch({ type: 'TOGGLE_THEME' })
   }
 
+  const getUserName = () => {
+    if (!user) {
+      return 'Guest'
+    }
+
+    if (user.displayName) {
+      return user.displayName.split(' ')[0]
+    }
+
+    const emailName = user.email?.split('@')[0] || 'Customer'
+    return emailName.charAt(0).toUpperCase() + emailName.slice(1)
+  }
+
   const handleAuthentication = async () => {
     if (user && isFirebaseConfigured && auth) {
+      clearActivityTime() // Clear session activity timestamp on logout
       await signOut(auth)
       navigate('/')
       return
@@ -41,9 +57,7 @@ function Header() {
   return (
     <header className="header">
       <Link to="/" className="header__logoLink" aria-label="Amazon home">
-        <div className="header__logo">
-          <span>amazon</span>
-        </div>
+        <img className="header__logo" src={logo} alt="Amazon Logo" />
       </Link>
 
       <div className="header__search">
@@ -69,21 +83,19 @@ function Header() {
         </button>
 
         <button className="header__option header__optionButton" type="button" onClick={handleAuthentication}>
-          <span className="header__optionLineOne">
-            Hello, {user?.email ? user.email.split('@')[0] : 'Guest'}
-          </span>
-          <span className="header__optionLineTwo">{user ? 'Sign Out' : 'Sign In'}</span>
+          <span className="header__optionLineOne">Hello, {getUserName()}</span>
+          <span className="header__optionLineTwo">{user ? 'Logout' : 'Sign In'}</span>
         </button>
 
-        <div className="header__option">
+        <Link to="/orders" className="header__option">
           <span className="header__optionLineOne">Returns</span>
           <span className="header__optionLineTwo">& Orders</span>
-        </div>
+        </Link>
 
-        <div className="header__option">
+        <Link to="/prime" className="header__option">
           <span className="header__optionLineOne">Your</span>
           <span className="header__optionLineTwo">Prime</span>
-        </div>
+        </Link>
 
         <Link to="/checkout" className="header__basket" aria-label={`Basket with ${basket.length} items`}>
           <ShoppingBasketIcon />

@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { Link, useNavigate } from 'react-router-dom'
 import { auth, isFirebaseConfigured } from '../firebase.js'
+import { getAuthErrorMessage } from '../utils/authErrors.js'
+import { setLastActiveTime } from '../utils/sessionPersistence.js'
 
 function Signup() {
   const navigate = useNavigate()
@@ -9,6 +11,7 @@ function Signup() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [authAction, setAuthAction] = useState('')
 
   const register = async (event) => {
     event.preventDefault()
@@ -20,14 +23,17 @@ function Signup() {
     }
 
     setIsSubmitting(true)
+    setAuthAction('signup')
 
     try {
       await createUserWithEmailAndPassword(auth, email, password)
+      setLastActiveTime() // Set session activity timestamp on successful signup
       navigate('/')
     } catch (authError) {
-      setError(authError.message)
+      setError(getAuthErrorMessage(authError.code))
     } finally {
       setIsSubmitting(false)
+      setAuthAction('')
     }
   }
 
@@ -59,10 +65,10 @@ function Signup() {
             required
           />
 
-          {error && <p className="login__error">{error}</p>}
+          {error && <div className="auth__status" role="alert">{error}</div>}
 
           <button className="amazonButton login__signInButton" type="submit" disabled={isSubmitting}>
-            Create account
+            {isSubmitting && authAction === 'signup' ? 'Creating account...' : 'Create account'}
           </button>
         </form>
 
