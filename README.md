@@ -1,6 +1,6 @@
 # Amazon Clone
 
-A polished Amazon-style e-commerce application built with React, Vite, Firebase, React Router, Context API, and CSS3. The project is inspired by Amazon's familiar shopping UI/UX and was developed to satisfy the requirements of the official **Amazon Clone using React** assignment PDF.
+A polished Amazon-style e-commerce application built with React, Vite, Firebase, React Router, Context API, and CSS3. The project is inspired by Amazon's familiar shopping UI/UX and was developed to satisfy the requirements of the official **Amazon Clone using React**.
 
 The app includes Firebase authentication, a persistent shopping basket, product discovery tools, wishlist support, dark mode, a multi-step checkout flow, mock payment UI, and an order confirmation experience.
 
