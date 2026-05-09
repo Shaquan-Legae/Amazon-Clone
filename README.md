@@ -146,9 +146,7 @@ Firebase features used:
 
 The application still runs without Firebase configuration. If Firebase values are missing, authentication is disabled safely and the homepage uses the fallback product dataset from `src/data/products.js`.
 
-## Screenshots
-
-Add screenshots to a `screenshots/` folder and update these paths when available.
+# Screenshots
 
 ### Home Page
 
@@ -170,9 +168,13 @@ Add screenshots to a `screenshots/` folder and update these paths when available
 
 ![Login](screenshots/login.png)
 
-### Wishlist
+### Returns & Orders
 
-![Wishlist](screenshots/wishlist.png)
+![Returns](screenshots/returns.png)
+
+### Prime
+
+![Prime](screenshots/prime.png)
 
 ## Rubric Coverage
 
