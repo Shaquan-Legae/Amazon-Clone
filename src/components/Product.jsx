@@ -1,8 +1,10 @@
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useStateValue } from '../StateProvider.js'
+import { createProductReturnLocation, saveProductReturnLocation } from '../utils/productNavigation.js'
 
 function Product({ id, title, image, price, rating, category }) {
   const [{ user, wishlist }, dispatch] = useStateValue()
+  const location = useLocation()
   const navigate = useNavigate()
   const isWishlisted = wishlist.some((item) => item.id === id)
 
@@ -39,8 +41,18 @@ function Product({ id, title, image, price, rating, category }) {
     })
   }
 
+  const openProductDetails = () => {
+    const returnLocation = createProductReturnLocation(location)
+    saveProductReturnLocation(returnLocation)
+    navigate(`/product/${id}`, {
+      state: {
+        returnLocation,
+      },
+    })
+  }
+
   return (
-    <article className="product" onClick={() => navigate(`/product/${id}`)} style={{ cursor: 'pointer' }}>
+    <article className="product" onClick={openProductDetails} style={{ cursor: 'pointer' }}>
       <button
         className={`product__wishlist${isWishlisted ? ' product__wishlist--active' : ''}`}
         type="button"

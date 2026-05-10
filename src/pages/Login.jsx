@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
 import { Link, useNavigate } from 'react-router-dom'
+import googleLogo from '../assets/google.svg'
+import logo from '../assets/logo.png'
 import { auth, googleProvider, isFirebaseConfigured } from '../firebase.js'
 import { getAuthErrorMessage } from '../utils/authErrors.js'
 import { setLastActiveTime } from '../utils/sessionPersistence.js'
@@ -65,7 +67,7 @@ function Login() {
   return (
     <main className="login">
       <Link to="/" className="login__logo" aria-label="Amazon home">
-        amazon
+        <img src={logo} alt="Amazon" />
       </Link>
 
       <section className="login__container">
@@ -97,7 +99,8 @@ function Login() {
         </form>
 
         <button className="login__googleButton" type="button" onClick={signInWithGoogle} disabled={isSubmitting}>
-          {isSubmitting && authAction === 'google' ? 'Connecting Google...' : 'Sign in with Google'}
+          <img src={googleLogo} alt="" aria-hidden="true" />
+          <span>{isSubmitting && authAction === 'google' ? 'Connecting Google...' : 'Continue with Google'}</span>
         </button>
 
         <p className="login__legal">

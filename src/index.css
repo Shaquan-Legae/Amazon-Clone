@@ -123,6 +123,7 @@ button:disabled {
   display: flex;
   gap: 16px;
   min-height: 64px;
+  min-width: 0;
   padding: 8px 18px;
   position: sticky;
   top: 0;
@@ -192,6 +193,7 @@ button:disabled {
   align-items: center;
   display: flex;
   gap: 8px;
+  min-width: 0;
 }
 
 .header__option,
@@ -207,6 +209,7 @@ button:disabled {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-width: 0;
   white-space: nowrap;
 }
 
@@ -218,12 +221,16 @@ button:disabled {
 .header__optionLineOne {
   font-size: 12px;
   line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .header__optionLineTwo {
   font-size: 14px;
   font-weight: 700;
   line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .header__basket {
@@ -262,6 +269,22 @@ button:disabled {
   font-weight: 700;
 }
 
+.sessionWarning {
+  background: #fff8e6;
+  border: 1px solid #f0c14b;
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(15, 17, 17, 0.18);
+  color: #111;
+  font-size: 14px;
+  font-weight: 700;
+  max-width: calc(100vw - 24px);
+  padding: 12px 16px;
+  position: fixed;
+  right: 12px;
+  top: 76px;
+  z-index: 200;
+}
+
 .home {
   margin: 0 auto;
   max-width: 1500px;
@@ -285,7 +308,7 @@ button:disabled {
 .home__heroImage {
   height: 100%;
   object-fit: cover;
-  object-position: center;
+  object-position: center 30%;
   width: 100%;
 }
 
@@ -472,6 +495,16 @@ button:disabled {
   margin: 0 auto;
 }
 
+.productDetails__back {
+  background: var(--button-secondary-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  color: var(--text-color);
+  margin-bottom: 16px;
+  min-height: 34px;
+  padding: 7px 14px;
+}
+
 .productDetails__container {
   background: var(--surface-bg);
   border: 1px solid var(--border-color);
@@ -601,10 +634,17 @@ button:disabled {
 }
 
 .login__logo {
-  color: var(--text-color);
-  font-size: 34px;
-  font-weight: 700;
-  margin-bottom: 24px;
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  margin-bottom: 22px;
+}
+
+.login__logo img {
+  display: block;
+  height: auto;
+  object-fit: contain;
+  width: 132px;
 }
 
 .login__logo span {
@@ -666,6 +706,12 @@ body[data-theme='dark'] .auth__status {
   color: #ffdede;
 }
 
+body[data-theme='dark'] .sessionWarning {
+  background: #2d2410;
+  border-color: #b88a1d;
+  color: #ffe8aa;
+}
+
 .login__legal {
   font-size: 12px;
   line-height: 1.4;
@@ -687,15 +733,33 @@ body[data-theme='dark'] .auth__status {
 
 .login__googleButton {
   align-items: center;
-  background: var(--surface-bg);
-  border: 1px solid var(--border-color);
+  background: #fff;
+  border: 1px solid #d5d9d9;
   border-radius: 3px;
-  color: var(--text-color);
+  color: #111;
   display: flex;
+  gap: 10px;
   justify-content: center;
   margin-top: 12px;
-  min-height: 34px;
+  min-height: 38px;
+  padding: 8px 12px;
+  transition: background-color 0.18s ease, border-color 0.18s ease;
   width: 100%;
+}
+
+.login__googleButton:hover:not(:disabled) {
+  background: #f7fafa;
+  border-color: #c8cccc;
+}
+
+.login__googleButton img {
+  flex: 0 0 auto;
+  height: 18px;
+  width: 18px;
+}
+
+.login__googleButton span {
+  line-height: 1;
 }
 
 .checkout {
@@ -1441,8 +1505,7 @@ body[data-theme='dark'] .checkoutForm span {
 }
 
 @media (max-width: 700px) {
-  .home__controls,
-  .header {
+  .home__controls {
     flex-wrap: wrap;
   }
 
@@ -1504,14 +1567,13 @@ body[data-theme='dark'] .checkoutForm span {
 
 @media (max-width: 1100px) {
   .header {
-    align-items: stretch;
-    flex-wrap: wrap;
+    align-items: center;
     gap: 8px;
   }
 
   .header__search {
-    flex-basis: 100%;
-    order: 3;
+    flex: 1 1 220px;
+    min-width: 120px;
   }
 
   .header__nav {
@@ -1545,36 +1607,116 @@ body[data-theme='dark'] .checkoutForm span {
 
 @media (max-width: 640px) {
   .header {
-    padding: 8px;
+    gap: 6px;
+    min-height: 52px;
+    overflow: hidden;
+    padding: 6px;
   }
 
-  .header__nav {
-    gap: 2px;
-    width: 100%;
+  .header__logo {
+    max-height: 34px;
+    padding: 4px 3px;
+    width: clamp(58px, 17vw, 76px);
   }
 
   .header__search {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .header__searchInput {
+    height: 34px;
+    min-width: 0;
+    padding: 0 8px;
+    font-size: 13px;
+  }
+
+  .header__searchIcon {
+    height: 34px !important;
+    padding: 7px;
+    width: 34px !important;
+  }
+
+  .header__nav {
+    flex: 0 1 auto;
+    gap: 1px;
+    margin-left: 0;
     min-width: 0;
   }
 
   .header__option {
-    flex: 1;
+    flex: 0 1 46px;
     min-width: 0;
-    padding: 6px;
+    min-height: 36px;
+    overflow: hidden;
+    padding: 3px 2px;
   }
 
   .header__optionLineOne {
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 10px;
+    max-width: 100%;
   }
 
   .header__optionLineTwo {
+    font-size: 11px;
+    max-width: 100%;
+  }
+
+  .header__optionButton {
+    max-width: 58px;
+  }
+
+  .header__themeToggle {
+    flex: 0 0 32px;
+    min-height: 34px;
+    min-width: 32px;
+    padding: 5px;
+  }
+
+  .header__themeToggle svg,
+  .header__basket svg {
+    font-size: 20px;
+  }
+
+  .header__basket {
+    flex: 0 0 auto;
+    gap: 1px;
+    min-height: 36px;
+    padding: 3px 2px;
+  }
+
+  .header__basketCount {
     font-size: 12px;
+  }
+
+  .sessionWarning {
+    font-size: 12px;
+    left: 8px;
+    max-width: none;
+    right: 8px;
+    text-align: center;
+    top: 58px;
+  }
+
+  .login {
+    padding: 22px 14px;
+  }
+
+  .login__logo {
+    margin-bottom: 18px;
+  }
+
+  .login__logo img {
+    width: 112px;
   }
 
   .home__hero {
     height: 230px;
     margin-bottom: -70px;
+  }
+
+  .home__heroImage {
+    object-position: center 24%;
   }
 
   .home__products {
@@ -1688,6 +1830,59 @@ body[data-theme='dark'] .checkoutForm span {
   .orderCard__item img {
     height: 96px;
     width: 96px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    gap: 4px;
+    padding: 5px 4px;
+  }
+
+  .header__logo {
+    width: clamp(54px, 15vw, 62px);
+  }
+
+  .header__searchInput {
+    font-size: 12px;
+    padding: 0 6px;
+  }
+
+  .header__searchIcon {
+    width: 30px !important;
+  }
+
+  .header__nav {
+    gap: 0;
+  }
+
+  .header__option {
+    flex-basis: 40px;
+    padding-left: 1px;
+    padding-right: 1px;
+  }
+
+  .header__optionButton {
+    flex-basis: 52px;
+    max-width: 52px;
+  }
+
+  .header__optionLineOne {
+    font-size: 9px;
+  }
+
+  .header__optionLineTwo {
+    font-size: 10px;
+  }
+
+  .header__themeToggle {
+    flex-basis: 30px;
+    min-width: 30px;
+  }
+
+  .header__basket {
+    padding-left: 1px;
+    padding-right: 1px;
   }
 }
 

@@ -1,9 +1,11 @@
-import { useParams, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useStateValue } from '../StateProvider.js'
 import { fallbackProducts } from '../data/products.js'
+import { saveProductReturnLocation } from '../utils/productNavigation.js'
 
 function ProductDetails() {
   const { id } = useParams()
+  const location = useLocation()
   const navigate = useNavigate()
   const [{ user, basket, wishlist }, dispatch] = useStateValue()
 
@@ -36,6 +38,22 @@ function ProductDetails() {
     })
   }
 
+  const handleBack = () => {
+    const returnLocation = location.state?.returnLocation
+
+    if (returnLocation) {
+      saveProductReturnLocation(returnLocation)
+      navigate(-1)
+      return
+    }
+
+    navigate('/', {
+      state: {
+        scrollToTop: true,
+      },
+    })
+  }
+
   if (!product) {
     return (
       <div className="productDetails productDetails--notFound">
@@ -52,6 +70,10 @@ function ProductDetails() {
 
   return (
     <div className="productDetails">
+      <button className="productDetails__back" type="button" onClick={handleBack}>
+        Back
+      </button>
+
       <div className="productDetails__container">
         <div className="productDetails__image">
           <img src={product.image} alt={product.title} />
