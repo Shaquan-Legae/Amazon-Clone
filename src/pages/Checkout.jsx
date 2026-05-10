@@ -5,9 +5,7 @@ import RecommendedProducts from '../components/RecommendedProducts.jsx'
 import Subtotal from '../components/Subtotal.jsx'
 import { getBasketTotal } from '../reducer.js'
 import { useStateValue } from '../StateProvider.js'
-import { detectCardType } from '../utils/cardDetection.js'
-import visaLogo from '../assets/visa.svg'
-import mastercardLogo from '../assets/mastercard.svg'
+import { detectCardType, getCardDisplay } from '../utils/cardDetection.js'
 
 const deliveryOptions = [
   {
@@ -41,17 +39,6 @@ const requiredShippingFields = [
 ]
 
 const requiredPaymentFields = ['cardholderName', 'cardNumber', 'expiry', 'cvv', 'country', 'billingZip']
-
-function getCardIcon(cardType) {
-  switch (cardType) {
-    case 'visa':
-      return visaLogo
-    case 'mastercard':
-      return mastercardLogo
-    default:
-      return null
-  }
-}
 
 const formatMoney = (amount) =>
   new Intl.NumberFormat('en-ZA', {
@@ -498,25 +485,21 @@ function Checkout() {
 
               <label className="checkoutForm__wide">
                 Card Number
-                <div className="cardInputContainer">
-                  <input
-                    name="cardNumber"
-                    inputMode="numeric"
-                    maxLength="19"
-                    value={paymentDetails.cardNumber}
-                    onChange={updatePayment}
-                    placeholder="4242 4242 4242 4242"
-                    disabled={isProcessingPayment}
-                  />
-                  {getCardIcon(detectedCardType) && (
-                    <img
-                      src={getCardIcon(detectedCardType)}
-                      alt={`${detectedCardType} card`}
-                      className="cardIcon"
-                    />
-                  )}
-                </div>
+                <input
+                  name="cardNumber"
+                  inputMode="numeric"
+                  maxLength="19"
+                  value={paymentDetails.cardNumber}
+                  onChange={updatePayment}
+                  placeholder="4242 4242 4242 4242"
+                  disabled={isProcessingPayment}
+                />
                 {paymentErrors.cardNumber && <span>{paymentErrors.cardNumber}</span>}
+                {!paymentErrors.cardNumber && getCardDisplay(detectedCardType) && (
+                  <span className="cardDetection" style={{ color: getCardDisplay(detectedCardType).color }}>
+                    {getCardDisplay(detectedCardType).label}
+                  </span>
+                )}
               </label>
 
               <label>
