@@ -243,10 +243,18 @@ button:disabled {
   min-height: 45px;
   min-width: 45px;
   padding: 7px;
+  transition: background-color 0.2s ease;
+  outline: none;
 }
 
 .header__themeToggle:hover {
-  border-color: #fff;
+  border-color: transparent;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.header__themeToggle:focus {
+  outline: none;
+  border-color: transparent;
 }
 
 .header__basketCount {
