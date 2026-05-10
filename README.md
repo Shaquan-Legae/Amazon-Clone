@@ -140,14 +140,25 @@ If Firebase is not configured, the app safely falls back to local product data.
 
 ---
 
-## Screenshots
+## 📸 Screenshots
 
-Home Page  
-Dark Mode  
-Cart  
-Login  
-Returns & Orders  
-Prime  
+### Home Page
+![Home Page](./screenshots/home.png)
+
+### Dark Mode
+![Dark Mode](./screenshots/dark-mode.png)
+
+### Cart
+![Cart](./screenshots/cart.png)
+
+### Login Page
+![Login](./screenshots/login.png)
+
+### Returns & Orders
+![Returns](./screenshots/returns.png)
+
+### Prime Page
+![Prime](./screenshots/prime.png)
 
 ---
 
@@ -176,4 +187,4 @@ Deployment Ready — Build-ready (Netlify/Firebase supported)
 
 Built by Kamogelo Legae.
 
-This project demonstrates a structured React e-commerce application focused on UI/UX, state management, and real-world frontend architecture patterns.
+This project demonstrates a structured React e-commerce application focused on UI/UX, state management, and real-world frontend architecture patterns.s
