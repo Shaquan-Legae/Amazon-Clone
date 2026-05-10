@@ -1,6 +1,6 @@
 # Amazon Clone
 
-A polished Amazon-style e-commerce application built with React, Vite, Firebase, React Router, Context API, and CSS3. The project is inspired by Amazon's familiar shopping UI/UX and was developed to satisfy the requirements of the official **Amazon Clone using React** assignment PDF.
+A polished Amazon-style e-commerce application built with React, Vite, Firebase, React Router, Context API, and CSS3. The project is inspired by Amazon's familiar shopping UI/UX and was developed to satisfy the requirements of the official **Amazon Clone using React**.
 
 The app includes Firebase authentication, a persistent shopping basket, product discovery tools, wishlist support, dark mode, a multi-step checkout flow, mock payment UI, and an order confirmation experience.
 
@@ -146,13 +146,11 @@ Firebase features used:
 
 The application still runs without Firebase configuration. If Firebase values are missing, authentication is disabled safely and the homepage uses the fallback product dataset from `src/data/products.js`.
 
-## Screenshots
-
-Add screenshots to a `screenshots/` folder and update these paths when available.
+# Screenshots
 
 ### Home Page
 
-![Home Page](screenshots/home-page.png)
+![Home Page](screenshots/home.png)
 
 ### Dark Mode
 
@@ -162,17 +160,17 @@ Add screenshots to a `screenshots/` folder and update these paths when available
 
 ![Cart](screenshots/cart.png)
 
-### Checkout
-
-![Checkout](screenshots/checkout.png)
-
 ### Login
 
 ![Login](screenshots/login.png)
 
-### Wishlist
+### Returns & Orders
 
-![Wishlist](screenshots/wishlist.png)
+![Returns](screenshots/returns.png)
+
+### Prime
+
+![Prime](screenshots/prime.png)
 
 ## Rubric Coverage
 
@@ -198,8 +196,3 @@ Add screenshots to a `screenshots/` folder and update these paths when available
 Built by **Kamogelo Legae**.
 
 This project was created as a portfolio-quality React e-commerce build and assignment submission, with a focus on clean structure, functional shopping flows, and polished user experience.
-
-## License
-
-MIT License
->>>>>>> 70a02d2 (UI Changes)
