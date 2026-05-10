@@ -40,14 +40,6 @@ const requiredShippingFields = [
 
 const requiredPaymentFields = ['cardholderName', 'cardNumber', 'expiry', 'cvv', 'country', 'billingZip']
 
-const paymentProcessSteps = [
-  'Processing payment...',
-  'Verifying details...',
-  'Finalising order...',
-  'Payment successful 🎉',
-  'Order placed successfully',
-]
-
 const formatMoney = (amount) =>
   new Intl.NumberFormat('en-ZA', {
     style: 'currency',
@@ -101,8 +93,6 @@ function Checkout() {
   })
   const [paymentErrors, setPaymentErrors] = useState({})
   const [detectedCardType, setDetectedCardType] = useState('empty')
-  const [paymentStatus, setPaymentStatus] = useState('')
-  const [paymentStep, setPaymentStep] = useState(0)
   const [isProcessingPayment, setIsProcessingPayment] = useState(false)
   const [confirmedOrder, setConfirmedOrder] = useState(null)
 
@@ -193,28 +183,24 @@ function Checkout() {
     const nextErrors = {}
     const rawCardNumber = paymentDetails.cardNumber.replace(/\D/g, '')
 
-    if (!paymentDetails.cardholderName.trim()) {
-      nextErrors.cardholderName = 'Enter the cardholder name.'
-    }
+    // Check required fields
+    requiredPaymentFields.forEach((field) => {
+      if (!paymentDetails[field].trim()) {
+        nextErrors[field] = 'This field is required.'
+      }
+    })
 
-    if (!/^\d{16}$/.test(rawCardNumber)) {
+    // Specific validations
+    if (paymentDetails.cardNumber && !/^\d{16}$/.test(rawCardNumber)) {
       nextErrors.cardNumber = 'Enter a valid 16-digit card number.'
     }
 
-    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(paymentDetails.expiry)) {
+    if (paymentDetails.expiry && !/^(0[1-9]|1[0-2])\/\d{2}$/.test(paymentDetails.expiry)) {
       nextErrors.expiry = 'Enter a valid expiry date in MM/YY format.'
     }
 
-    if (!/^\d{3,4}$/.test(paymentDetails.cvv)) {
+    if (paymentDetails.cvv && !/^\d{3,4}$/.test(paymentDetails.cvv)) {
       nextErrors.cvv = 'Enter a valid 3 or 4 digit CVV.'
-    }
-
-    if (!paymentDetails.country.trim()) {
-      nextErrors.country = 'Please select a country.'
-    }
-
-    if (!paymentDetails.billingZip.trim()) {
-      nextErrors.billingZip = 'Enter your billing ZIP code.'
     }
 
     setPaymentErrors(nextErrors)
@@ -233,8 +219,6 @@ function Checkout() {
     }
 
     setIsProcessingPayment(true)
-    setPaymentStep(1)
-    setPaymentStatus(paymentProcessSteps[0])
 
     const orderSnapshot = {
       orderNumber: `AMZ-${Date.now().toString().slice(-8)}`,
@@ -249,28 +233,11 @@ function Checkout() {
     }
 
     window.setTimeout(() => {
-      setPaymentStep(2)
-      setPaymentStatus(paymentProcessSteps[1])
-    }, 650)
-
-    window.setTimeout(() => {
-      setPaymentStep(3)
-      setPaymentStatus(paymentProcessSteps[2])
-    }, 1350)
-
-    window.setTimeout(() => {
-      setPaymentStep(4)
-      setPaymentStatus(paymentProcessSteps[3])
-    }, 2200)
-
-    window.setTimeout(() => {
       const storedOrders = readStoredOrders()
       window.localStorage.setItem('orders', JSON.stringify([orderSnapshot, ...storedOrders]))
       setConfirmedOrder(orderSnapshot)
       dispatch({ type: 'EMPTY_BASKET' })
       setIsProcessingPayment(false)
-      setPaymentStatus(paymentProcessSteps[4])
-      setPaymentStep(5)
       setStep(5)
     }, 2800)
   }
@@ -328,8 +295,25 @@ function Checkout() {
     )
   }
 
+  const isPaymentValid = requiredPaymentFields.every(
+    (field) => paymentDetails[field]?.trim()
+  )
+
   return (
-    <main className="checkout checkoutFlow">
+    <>
+      <style>
+        {`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+          @keyframes dot-animation {
+            0%, 20%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+          }
+        `}
+      </style>
+      <main className="checkout checkoutFlow">
       <section className="checkout__left checkoutFlow__main">
         <div className="checkout__ad">
           <div>
@@ -479,20 +463,12 @@ function Checkout() {
           <section className="checkoutFlow__panel">
             <h1 className="checkout__title">Shipping & payment details</h1>
 
-            {(isProcessingPayment || paymentStep > 0) && (
-              <section className="paymentStatus">
-                <p className="paymentStatus__label">Payment progress</p>
-                <ol className="paymentStatus__list">
-                  {paymentProcessSteps.map((text, index) => (
-                    <li
-                      key={text}
-                      className={paymentStep >= index + 1 ? 'paymentStatus__item paymentStatus__item--complete' : 'paymentStatus__item'}
-                    >
-                      {text}
-                    </li>
-                  ))}
-                </ol>
-              </section>
+            {isProcessingPayment && (
+              <div className="paymentLoader">
+                <div className="paymentLoader__spinner"></div>
+                <h3>Payment processing<span className="dots"></span></h3>
+                <p>Securing transaction</p>
+              </div>
             )}
 
             <form className="checkoutForm">
@@ -585,11 +561,11 @@ function Checkout() {
             </form>
 
             <div className="checkoutFlow__actions">
-              <button type="button" onClick={() => setStep(3)} disabled={isProcessing}>
+              <button type="button" onClick={() => setStep(3)} disabled={isProcessingPayment}>
                 Back
               </button>
-              <button className="amazonButton" type="button" onClick={placeOrder} disabled={isProcessing}>
-                {isProcessing ? 'Finalizing payment...' : 'Place Order'}
+              <button className="amazonButton" type="button" onClick={placeOrder} disabled={!isPaymentValid || isProcessingPayment}>
+                {isProcessingPayment ? 'Finalizing payment...' : 'Place Order'}
               </button>
             </div>
           </section>
@@ -613,6 +589,7 @@ function Checkout() {
 
       <RecommendedProducts />
     </main>
+    </>
   )
 }
 

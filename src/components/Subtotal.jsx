@@ -1,17 +1,9 @@
-import { useNavigate } from 'react-router-dom'
 import { useStateValue } from '../StateProvider.js'
 import { getBasketTotal } from '../reducer.js'
 
 function Subtotal() {
-  const [{ basket, user }] = useStateValue()
-  const navigate = useNavigate()
+  const [{ basket }] = useStateValue()
   const itemLabel = basket.length === 1 ? 'item' : 'items'
-
-  const handleCheckout = () => {
-    if (basket.length > 0 && user) {
-      navigate('/checkout')
-    }
-  }
 
   return (
     <aside className="subtotal">

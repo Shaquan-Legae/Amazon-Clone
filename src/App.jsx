@@ -12,7 +12,7 @@ import ProductDetails from './pages/ProductDetails.jsx'
 import NotFound from './pages/NotFound.jsx'
 import { auth, isFirebaseConfigured } from './firebase.js'
 import { useStateValue } from './StateProvider.js'
-import { setupActivityTracking, setLastActiveTime, isSessionActive } from './utils/sessionPersistence.js'
+import { setupActivityTracking, setLastActiveTime } from './utils/sessionPersistence.js'
 
 function App() {
   const [{ basket, isDarkMode, wishlist }, dispatch] = useStateValue()

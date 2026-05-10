@@ -147,7 +147,17 @@ button:disabled {
 .header__logo:hover,
 .header__option:hover,
 .header__basket:hover {
-  border-color: #fff;
+  border-color: transparent;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.header__logo {
+  transition: background-color 0.2s ease;
+}
+
+.header__option,
+.header__basket {
+  transition: background-color 0.2s ease;
 }
 
 .header__search {
@@ -1671,4 +1681,61 @@ body[data-theme='dark'] .checkoutForm span {
     height: 96px;
     width: 96px;
   }
+}
+
+/* Payment Loader Styles */
+.paymentLoader {
+  background: var(--surface-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.paymentLoader__spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(52, 152, 219, 0.2);
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  animation: paymentLoaderSpin 1s linear infinite;
+  box-shadow: 0 0 12px rgba(52, 152, 219, 0.3);
+}
+
+.paymentLoader h3 {
+  color: var(--text-color);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.paymentLoader h3 .dots::after {
+  content: '';
+  animation: paymentLoaderDots 1.4s infinite;
+}
+
+.paymentLoader p {
+  color: var(--muted-text);
+  font-size: 14px;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+@keyframes paymentLoaderSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes paymentLoaderDots {
+  0%, 20% { content: ''; }
+  40% { content: '.'; }
+  60% { content: '..'; }
+  80%, 100% { content: '...'; }
 }
