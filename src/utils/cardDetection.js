@@ -5,24 +5,17 @@ export function detectCardType(cardNumber) {
     return 'empty'
   }
 
-  if (/^4/.test(sanitized)) {
+  if (sanitized.startsWith('4')) {
     return 'visa'
   }
 
-  if (/^5[1-5]/.test(sanitized)) {
+  if (sanitized.startsWith('5')) {
     return 'mastercard'
   }
 
-  return 'unknown'
-}
-
-export function getCardDisplay(cardType) {
-  const displays = {
-    visa: { label: '💳 Visa', color: '#1435cb' },
-    mastercard: { label: '💳 Mastercard', color: '#eb001b' },
-    unknown: { label: '💳 Card detected', color: '#999' },
-    empty: null,
+  if (sanitized.startsWith('3')) {
+    return 'amex'
   }
 
-  return displays[cardType] || null
+  return 'unknown'
 }

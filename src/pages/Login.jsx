@@ -1,14 +1,17 @@
 import { useState } from 'react'
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
 import { Link, useNavigate } from 'react-router-dom'
+import amazonLogo from '../assets/amazon.svg'
+import amazonLightLogo from '../assets/amazon_light.svg'
 import googleLogo from '../assets/google.svg'
-import logo from '../assets/logo.png'
 import { auth, googleProvider, isFirebaseConfigured } from '../firebase.js'
+import { useStateValue } from '../StateProvider.js'
 import { getAuthErrorMessage } from '../utils/authErrors.js'
 import { setLastActiveTime } from '../utils/sessionPersistence.js'
 
 function Login() {
   const navigate = useNavigate()
+  const [{ isDarkMode }] = useStateValue()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -16,6 +19,7 @@ function Login() {
   const [authAction, setAuthAction] = useState('')
 
   const canUseFirebase = isFirebaseConfigured && auth
+  const authLogo = isDarkMode ? amazonLogo : amazonLightLogo
 
   const signIn = async (event) => {
     event.preventDefault()
@@ -67,7 +71,7 @@ function Login() {
   return (
     <main className="login">
       <Link to="/" className="login__logo" aria-label="Amazon home">
-        <img src={logo} alt="Amazon" />
+        <img src={authLogo} alt="Amazon" />
       </Link>
 
       <section className="login__container">

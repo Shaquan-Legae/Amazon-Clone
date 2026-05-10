@@ -436,19 +436,26 @@ button:disabled {
 
 .product__wishlist {
   align-items: center;
-  background: var(--surface-bg);
-  border: 1px solid var(--border-color);
+  background: transparent;
+  border: 1px solid transparent;
   border-radius: 999px;
   color: var(--muted-text);
   display: flex;
-  font-size: 18px;
-  height: 34px;
+  flex: 0 0 38px;
+  height: 38px;
   justify-content: center;
-  position: absolute;
-  right: 14px;
-  top: 14px;
-  width: 34px;
-  z-index: 1;
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+  width: 38px;
+}
+
+.product__wishlist:hover {
+  background: rgba(15, 17, 17, 0.06);
+  color: #c40000;
+  transform: scale(1.04);
+}
+
+.product__wishlist svg {
+  font-size: 21px;
 }
 
 .product__wishlist--active {
@@ -485,8 +492,18 @@ button:disabled {
 }
 
 .product__button {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.product__actions {
+  align-items: center;
   align-self: center;
-  width: 150px;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  max-width: 210px;
+  width: 100%;
 }
 
 .productDetails {
@@ -1080,14 +1097,6 @@ body[data-theme='dark'] .sessionWarning {
   color: #c40000;
   font-size: 12px;
   font-weight: 500;
-}
-
-.cardDetection {
-  color: #1435cb !important;
-  font-size: 12px;
-  font-weight: 600;
-  display: block;
-  margin-top: 6px;
 }
 
 body[data-theme='dark'] .checkoutForm span {
@@ -1946,19 +1955,23 @@ body[data-theme='dark'] .checkoutForm span {
 /* Card Input Styles */
 .cardInputContainer {
   position: relative;
+  width: 100%;
 }
 
 .cardInputContainer input {
-  padding-right: 50px;
+  padding-right: 64px;
   width: 100%;
 }
 
 .cardIcon {
+  max-height: 24px;
+  max-width: 42px;
+  object-fit: contain;
+  pointer-events: none;
   position: absolute;
   right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  height: 24px;
+  transition: opacity 0.18s ease;
   width: auto;
-  pointer-events: none;
 }

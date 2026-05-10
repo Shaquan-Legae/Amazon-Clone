@@ -1,3 +1,5 @@
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useStateValue } from '../StateProvider.js'
 import { createProductReturnLocation, saveProductReturnLocation } from '../utils/productNavigation.js'
@@ -53,17 +55,6 @@ function Product({ id, title, image, price, rating, category }) {
 
   return (
     <article className="product" onClick={openProductDetails} style={{ cursor: 'pointer' }}>
-      <button
-        className={`product__wishlist${isWishlisted ? ' product__wishlist--active' : ''}`}
-        type="button"
-        onClick={(e) => {
-          e.stopPropagation()
-          toggleWishlist()
-        }}
-        aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-      >
-        {'\u2665'}
-      </button>
       <div className="product__info">
         <p className="product__title">{title}</p>
         <p className="product__price">
@@ -78,12 +69,26 @@ function Product({ id, title, image, price, rating, category }) {
       </div>
 
       <img className="product__image" src={image} alt={title} />
-      <button className="amazonButton product__button" type="button" onClick={(e) => {
-        e.stopPropagation()
-        addToBasket()
-      }} disabled={!user}>
-        {user ? 'Add to Basket' : 'Sign in to Add'}
-      </button>
+      <div className="product__actions">
+        <button className="amazonButton product__button" type="button" onClick={(e) => {
+          e.stopPropagation()
+          addToBasket()
+        }} disabled={!user}>
+          {user ? 'Add to Basket' : 'Sign in to Add'}
+        </button>
+
+        <button
+          className={`product__wishlist${isWishlisted ? ' product__wishlist--active' : ''}`}
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            toggleWishlist()
+          }}
+          aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+        >
+          {isWishlisted ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+        </button>
+      </div>
     </article>
   )
 }
